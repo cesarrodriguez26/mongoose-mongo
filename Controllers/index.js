@@ -1,6 +1,6 @@
-const getProducts = require ("./getProducts");
+const getProducts = require ("./GetProducts");
 const getProductsCart = require ("./GetProductsCart");
-const addProductCart = require ("./addProductCart");
+const addProductCart = require ("./AddProductCart");
 const putProduct = require ("./putProduct");
 const deleteProduct = require ("./DeleteProduct");
 
