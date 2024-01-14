@@ -4,10 +4,13 @@ const Product = require("../Models/Products");
 const addProductCart = async (req, res) => {
     const { name, img, price } = req.body;
 
-    const estaEnProducts= await Product.findOne({ name });
+    // Verifica si el producto está en la base de datos
+    const estaEnProducts = await Product.findOne({ name });
 
-    const noEstaVacio = name !== "" & img !== "" && price !=="";
+    // Verifica si los campos name, img y price no están vacíos
+    const noEstaVacio = name !== "" && img !== "" && price !== "";
 
+    // Verifica si el producto ya está en el carrito
     const estaEnElCarrito = await Cart.findOne({ name });
 
     if (!estaEnProducts) {
@@ -15,26 +18,34 @@ const addProductCart = async (req, res) => {
             mensaje: "Este producto no se encuentra en nuestra base de datos",
         });
     } else if (noEstaVacio && !estaEnElCarrito) {
-        const newProductInCart = new Cart({ mane, img, price, amount: 1});
+        // Crea un nuevo producto en el carrito
+        const newProductInCart = new Cart({ name, img, price, amount: 1 });
 
+        // Marca el producto como "en el carrito" en la base de datos de productos
         await Product.findByIdAndUpdate(
-            estaEnProducts?._id,
-            { inCart: true, mane, img, price},
+            estaEnProducts._id,
+            { inCart: true, name, img, price },
             { new: true }
-    )
-    .then((product) => {
-        newProductInCart.save();
-        res.json({
-            mensaje: 'El producto fue agregado',
-            product,
+        )
+        .then((product) => {
+            // Guarda el producto en el carrito
+            newProductInCart.save();
+            res.json({
+                mensaje: 'El producto fue agregado al carrito',
+                product,
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({
+                mensaje: 'Hubo un error al agregar el producto al carrito',
+            });
         });
-    })
-    .catch((error) => console.error(error));
-    
     } else if (estaEnElCarrito) {
         res.status(400).json({
-            mensaje: "El producto esta en el carrito",
+            mensaje: "El producto ya está en el carrito",
         });
     }
 };
- 
+
+module.exports = addProductCart;

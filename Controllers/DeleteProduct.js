@@ -7,7 +7,7 @@ const deleteProduct = async (req, res) => {
     const productInCart = await Cart.findById(productId);
 
     const {name, img, price, _id } = await Product.findOne({
-        name: productInCart.name,
+        name: productInCart.name
     });
 
     await Cart.findByIdAndDelete(productId);

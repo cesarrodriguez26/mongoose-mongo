@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/products", controllers.getProducts);
+
 app.get("/products-cart", controllers.getProductsCart);
 
 app.post("/products-cart", controllers.addProductCart);
@@ -17,8 +18,6 @@ app.post("/products-cart", controllers.addProductCart);
 app.put("/products-cart/:productId", controllers.putProduct);
 
 app.delete("/products-cart/:productId", controllers.deleteProduct);
-
-
 
 
 
